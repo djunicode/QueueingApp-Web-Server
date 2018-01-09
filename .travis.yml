@@ -1,0 +1,25 @@
+language: python
+
+python:
+  - 3.6
+
+services:
+  - mysql
+
+env:
+  - DJANGO=1.11.8 DB=mysql
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=queueing_app.settings
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+   - mysql -e 'create database db;'
+   - python3 manage.py makemigrations
+   - python3 manage.py migrate
+
+script:
+  - flake8
+  - python3 manage.py test
