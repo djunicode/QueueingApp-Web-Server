@@ -5,8 +5,7 @@ max-line-length=120
 ignore =
     H301,
     H306,
-    H501,
-    F401
+    H501
 
 exclude =
     .git,
