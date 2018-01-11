@@ -18,7 +18,7 @@ install:
 before_script:
    - mysql -u root -e 'CREATE DATABASE queue;'
    - mysql -u root -e "CREATE USER 'abc'@'localhost' IDENTIFIED BY 'example@123';"
-   - mysql -u root -e "GRANT ALL ON queue.* TO 'abc'@'localhost';"
+   - mysql -u root -e "GRANT ALL ON *.* TO 'abc'@'localhost';"
    - python3 manage.py makemigrations
    - python3 manage.py migrate
    - python manage.py syncdb --noinput
