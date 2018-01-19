@@ -3,7 +3,7 @@ from .serializers import LocationSerializer
 from .models import Location
 
 
-class CreateView(generics.ListCreateAPIView):
+class LocationList(generics.ListCreateAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
 
@@ -11,6 +11,6 @@ class CreateView(generics.ListCreateAPIView):
         serializer.save()
 
 
-class DetailsView(generics.RetrieveUpdateDestroyAPIView):
+class LocationDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Location.objects.all()
     serializer_class = LocationSerializer

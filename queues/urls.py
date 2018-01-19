@@ -1,11 +1,11 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import CreateView, DetailsView
+from .views import LocationList, LocationDetails
 
 
 urlpatterns = {
-    url(r'^queues/$', CreateView.as_view(), name='create'),
-    url(r'^queues/(?P<pk>[0-9]+)/$', DetailsView.as_view(), name='details'),
+    url(r'^queues/$', LocationList.as_view(), name='create'),
+    url(r'^queues/(?P<pk>[0-9]+)/$', LocationDetails.as_view(), name='details'),
 }
 
 
