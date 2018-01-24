@@ -17,11 +17,12 @@ class Location(Model):
 
 
 class Queue(Model):
-    maxLength = IntegerField(null=True, blank=True)
+    maxLength = IntegerField(null=True, blank=True, default=200)
     isEmpty = BooleanField(default=True)
     isFull = BooleanField(default=False)
     size = IntegerField(null=True, blank=True)
-    startTime = TimeField(auto_now_add=True)
+    # startTime = TimeField(auto_now_add=True)
+    startTime = TimeField(null=True, blank=True)
     avgTime = TimeField(null=True, blank=True)
     endTime = TimeField(null=True, blank=True)
     subject = CharField(max_length=100, null=True)
@@ -29,7 +30,7 @@ class Queue(Model):
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
     queueItems = ListCharField(
-        base_field=IntegerField(),
+        base_field=CharField(max_length=11),
         size=100,
         max_length=100 * 12,
         null=True,
@@ -108,15 +109,15 @@ class Queue(Model):
 
 
 class Teacher(Model):
-    user = OneToOneField(User, on_delete=CASCADE)
+    user = OneToOneField(User, on_delete=CASCADE, related_name='teacher')
     name = CharField(max_length=100, null=True)
     isFree = BooleanField(default=False)
-    sapId = IntegerField(unique=True, null=True)
+    sapId = CharField(unique=True, null=True, max_length=11)
     photo = FileField(null=True, blank=True)
     subject = CharField(max_length=100, null=True)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
-    loation = OneToOneField(Location, on_delete=CASCADE)
+    location = OneToOneField(Location, on_delete=CASCADE, related_name='location')
     queue = ManyToManyField(Queue, blank=True)
 
     def __str__(self):
@@ -124,9 +125,9 @@ class Teacher(Model):
 
 
 class Student(Model):
-    user = OneToOneField(User, on_delete=CASCADE)
+    user = OneToOneField(User, on_delete=CASCADE, related_name='student')
     name = CharField(max_length=100, null=True)
-    sapID = IntegerField(unique=True, null=True)
+    sapID = CharField(unique=True, null=True, max_length=11)
     department = CharField(max_length=10, null=True)
     year = CharField(max_length=2, null=True)
     div = CharField(max_length=1, null=True)
