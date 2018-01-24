@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .serializers import LocationSerializer, UserSerializer, TeacherSerializer, StudentSerializer
-from .models import Location, Teacher, Student
+from .serializers import QueueSerializer
+from .models import Location, Teacher, Student, Queue
 from django.contrib.auth.models import User
 
 
@@ -51,3 +52,16 @@ class StudentList(generics.ListCreateAPIView):
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+class QueueList(generics.ListCreateAPIView):
+    queryset = Queue.objects.all()
+    serializer_class = StudentSerializer
+
+    def platfrom_create(self, serializer):
+        serializer.save()
+
+
+class QueueDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Queue.objects.all()
+    serializer_class = QueueSerializer
