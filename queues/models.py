@@ -142,6 +142,8 @@ class Student(Model):
         return "{}".format(self.name)
 
 
+# mysqltestserver
+
 # @receiver(post_save, sender=User)
 # def create_user_teacher_profile(sender, instance, created, **kwargs):
 #     if created:
@@ -162,3 +164,12 @@ class Student(Model):
 # @receiver(post_save, sender=User)
 # def save_user_student_profile(sender, instance, **kwargs):
 #     instance.sudent.save()
+
+
+class Token(Model):
+    user = OneToOneField(User, on_delete=CASCADE, related_name='token')
+    token = CharField(max_length=200, null=True, blank=True)
+    valid = BooleanField(default=False)
+
+    def __str__(self):
+        return self.token

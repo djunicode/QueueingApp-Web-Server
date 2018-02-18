@@ -1,6 +1,9 @@
 from rest_framework import serializers
-from .models import Location, Teacher, Student, Queue
+from .models import Location, Teacher, Student, Queue, Token
 from django.contrib.auth.models import User
+from .tokens import account_activation_token
+from django.core.mail import send_mail
+from queueing_app import settings
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -19,16 +22,33 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     # teacher = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.all())
+    # token = serializers.CharField(max_length=100)
+    # token = serializers.PrimaryKeyRelatedField(queryset=Token.objects.all())
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'password')
+        fields = ('id', 'username', 'password', 'email')
+        # read_only_fields = ('token',)
 
     def create(self, validated_data):
-        user = User(username=validated_data['username'])
+        user = User(username=validated_data['username'], email=validated_data['email'])
         user.set_password(validated_data['password'])
         user.save()
+
+        subject = "Email verification for django"
+        message = account_activation_token.make_token(user)
+        token = Token.objects.create(user=user, token=message)
+        token.save()
+        send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
         return user
+
+    # def update(self, instance, validated_data):
+    #     token_obj = Token.objects.get(user=instance)
+    #     user_token = validated_data['token']
+    #     if token_obj == user_token:
+    #         return Response("Token Matched!")
+    #     else:
+    #         return Response("Token not matched")
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -96,3 +116,10 @@ class QueueSerializer(serializers.ModelSerializer):
 
         queue.save()
         return queue
+
+
+class TokenSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Token
+        fields = ('id', 'token', 'valid')
