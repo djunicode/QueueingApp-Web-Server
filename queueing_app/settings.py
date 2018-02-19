@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'queueing_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test1',
-        'USER': 'abc',
-        'PASSWORD': 'example@123',
-        'HOST': 'localhost',
+        'NAME': 'sahiljajodia01$test2',
+        'USER': 'sahiljajodia01',
+        'PASSWORD': 'mysqltestserver',
+        'HOST': 'sahiljajodia01.mysql.pythonanywhere-services.com',
         'PORT': '',
     }
 }
