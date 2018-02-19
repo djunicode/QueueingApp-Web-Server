@@ -69,7 +69,7 @@ class UserDetail(APIView):
         # valid_data = serializer.data
 
         if serializer.is_valid():
-            if serializer.data['token'].is_valid() and serializer.data['token'] == token.token:
+            if serializer.data['token'] == token.token:
                 tokenSerializer.data['valid'] = True
                 return Response(tokenSerializer.data)
             else:
@@ -110,7 +110,7 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class QueueList(generics.ListCreateAPIView):
     queryset = Queue.objects.all()
-    serializer_class = StudentSerializer
+    serializer_class = QueueSerializer
 
     def platfrom_create(self, serializer):
         serializer.save()
