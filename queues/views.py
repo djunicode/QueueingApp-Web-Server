@@ -119,3 +119,22 @@ class QueueList(generics.ListCreateAPIView):
 class QueueDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Queue.objects.all()
     serializer_class = QueueSerializer
+
+
+class QueueAddItems(APIView):
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        queue = self.get_object(pk=pk)
+        serializer = QueueSerializer(queue, data=request.data)
+
+        if serializer.is_valid():
+            queue.queueItems.append(serializer.data['queueItems'])
+            queue.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
