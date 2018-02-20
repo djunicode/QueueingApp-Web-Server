@@ -70,11 +70,11 @@ class UserDetail(APIView):
 
         if serializer.is_valid():
             if serializer.data['token'] == token.token:
-                tokenSerializer.data['valid'] = True
+                token.valid = True
                 return Response(tokenSerializer.data)
             else:
                 return Response(tokenSerializer.data)
-            serializer.save()
+            token.save()
             # if serializer.is_valid():
             #     serializer.save()
             # return Response(serializer.data)
