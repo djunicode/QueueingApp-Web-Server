@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .serializers import LocationSerializer, UserSerializer, TeacherSerializer, StudentSerializer
-from .serializers import QueueSerializer, TokenSerializer
+from .serializers import QueueSerializer
 from .models import Location, Teacher, Student, Queue, Token
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
@@ -22,12 +22,12 @@ class LocationDetails(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LocationSerializer
 
 
-class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    def platform_create(self, serializer):
-        serializer.save()
+# class UserList(generics.ListCreateAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#     def platform_create(self, serializer):
+#         serializer.save()
 #
 #
 # class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -35,18 +35,18 @@ class UserList(generics.ListCreateAPIView):
 #     serializer_class = UserSerializer
 
 
-# class UserList(APIView):
-#     def get(self, request):
-#         users = User.objects.all()
-#         serializer = UserSerializer(users, many=True)
-#         return Response(serializer.data)
-#
-#     def post(self, request):
-#         serializer = UserSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserList(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserDetail(APIView):
@@ -63,23 +63,29 @@ class UserDetail(APIView):
 
     def put(self, request, pk):
         user = self.get_object(pk)
-        serializer = UserSerializer(user, data=request.data)
+        # serializer = UserSerializer(user, data=request.data)
         token = Token.objects.get(user=user)
-        tokenSerializer = TokenSerializer(token)
+        # tokenSerializer = TokenSerializer(token)
+        print(request.data['token'] == token.token)
         # valid_data = serializer.data
 
-        if serializer.is_valid():
-            if serializer.data['token'] == token.token:
-                token.valid = True
-                return Response(tokenSerializer.data)
-            else:
-                return Response(tokenSerializer.data)
-            token.save()
+        if request.data['token'] == token.token:
+            return Response({"valid": "true"})
+        else:
+            return Response({"valid": "false"})
+            # if tokenSerializer.data['token'] == token.token:
+            #     token.valid = True
+            #     # token.valid = True
+            #     return Response(token.valid)
+            # else:
+            #     return Response(token.valid)
+            # serializer.save()
             # if serializer.is_valid():
             #     serializer.save()
             # return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # return Response(tokenSerializer.data)
+        # else:
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TeacherList(generics.ListCreateAPIView):
@@ -116,25 +122,32 @@ class QueueList(generics.ListCreateAPIView):
         serializer.save()
 
 
-class QueueDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Queue.objects.all()
-    serializer_class = QueueSerializer
+# class QueueDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Queue.objects.all()
+#     serializer_class = QueueSerializer
 
 
 class QueueAddItems(APIView):
     def get_object(self, pk):
         try:
-            return User.objects.get(pk=pk)
-        except User.DoesNotExist:
+            return Queue.objects.get(pk=pk)
+        except Queue.DoesNotExist:
             raise Http404
 
-    def put(self, request, pk):
-        queue = self.get_object(pk=pk)
-        serializer = QueueSerializer(queue, data=request.data)
+    def get(self, request, pk):
+        queue = self.get_object(pk)
+        serializer = QueueSerializer(queue)
+        return Response(serializer.data)
 
+    def put(self, request, pk):
+        queue = self.get_object(pk)
+        serializer = QueueSerializer(queue, data=request.data)
         if serializer.is_valid():
-            queue.queueItems.append(serializer.data['queueItems'])
+            queue.queueItems.append(request.data['queueItems'])
+            for x in queue.queueItems:
+                print(x)
+            # print(queue.queueItems)
             queue.save()
             return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

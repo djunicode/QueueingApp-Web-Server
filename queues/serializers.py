@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .tokens import account_activation_token
 from django.core.mail import send_mail
 from queueing_app import settings
+from rest_framework.response import Response
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -42,13 +43,13 @@ class UserSerializer(serializers.ModelSerializer):
         send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
         return user
 
-    # def update(self, instance, validated_data):
-    #     token_obj = Token.objects.get(user=instance)
-    #     user_token = validated_data['token']
-    #     if token_obj == user_token:
-    #         return Response("Token Matched!")
-    #     else:
-    #         return Response("Token not matched")
+    def update(self, instance, validated_data):
+        token_obj = Token.objects.get(user=instance)
+        user_token = validated_data['token']
+        if token_obj == user_token:
+            return Response("Token Matched!")
+        else:
+            return Response("Token not matched")
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -116,6 +117,11 @@ class QueueSerializer(serializers.ModelSerializer):
 
         queue.save()
         return queue
+
+    # def update(self, instance, validated_data):
+    #     item = validated_data['queueItems']
+    #     instance.queueItems.append(item)
+    #     return instance
 
 
 class TokenSerializer(serializers.ModelSerializer):

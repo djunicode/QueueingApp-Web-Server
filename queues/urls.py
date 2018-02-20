@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from .views import LocationList, LocationDetails, TeacherList, TeacherDetail, UserList, UserDetail
-from .views import StudentList, StudentDetail, QueueList, QueueDetail
+from .views import StudentList, StudentDetail, QueueList, QueueAddItems
 
 
 urlpatterns = {
@@ -14,7 +14,7 @@ urlpatterns = {
     url(r'^queues/student/$', StudentList.as_view()),
     url(r'^queues/student/(?P<pk>[0-9]+)/$', StudentDetail.as_view()),
     url(r'^queues/queue/$', QueueList.as_view()),
-    url(r'^queues/queue/(?P<pk>[0-9]+)/$', QueueDetail.as_view()),
+    url(r'^queues/queue/(?P<pk>[0-9]+)/$', QueueAddItems.as_view()),
 }
 
 
