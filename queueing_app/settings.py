@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'queueing_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'queue',
-        'USER': 'abc',
-        'PASSWORD': 'example@123',
-        'HOST': 'localhost',
+        'NAME': 'sahiljajodia01$test2',
+        'USER': 'sahiljajodia01',
+        'PASSWORD': 'mysqltestserver',
+        'HOST': 'sahiljajodia01.mysql.pythonanywhere-services.com',
         'PORT': '',
     }
 }
@@ -126,4 +126,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+ALLOWED_HOSTS = ['*']
+
 # AUTH_USER_MODEL = 'queues.Profile'
+
+
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'djqueuingapp@gmail.com'
+EMAIL_HOST_PASSWORD = 'QueuingApp#2898'
+EMAIL_PORT = 587
