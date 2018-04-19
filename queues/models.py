@@ -1,6 +1,6 @@
 from django.db.models import CharField, BooleanField, OneToOneField
 from django.db.models import ManyToManyField, IntegerField, DateTimeField
-from django.db.models import TimeField, FileField, Model, CASCADE
+from django.db.models import TimeField, FileField, Model, CASCADE, ForeignKey
 from django_mysql.models import ListCharField
 from django.contrib.auth.models import User
 # from queueingApp import settings
@@ -27,6 +27,7 @@ class Queue(Model):
     endTime = TimeField(null=True, blank=True)
     subject = CharField(max_length=100, null=True)
     lock = BooleanField(default=False)
+    flag = IntegerField(default=0)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
     queueItems = ListCharField(
@@ -36,6 +37,7 @@ class Queue(Model):
         null=True,
         blank=True
     )
+    location = OneToOneField(Location, on_delete=CASCADE, related_name="queue_location", null=True)
 
     def __str__(self):
         return "{} - {} items".format(self.subject, len(self.queueItems))
@@ -110,15 +112,23 @@ class Queue(Model):
 
 class Teacher(Model):
     user = OneToOneField(User, on_delete=CASCADE, related_name='teacher')
+    register_id = CharField(max_length=250, null=True, blank=True)
     name = CharField(max_length=100, null=True)
     isFree = BooleanField(default=False)
     sapId = CharField(unique=True, null=True, max_length=11)
     photo = FileField(null=True, blank=True)
-    subject = CharField(max_length=100, null=True)
+    # subject = CharField(max_length=100, null=True)
+    subject = ListCharField(
+        base_field=CharField(max_length=50),
+        size=15,
+        max_length=15 * 51,
+        null=True,
+        blank=True
+    )
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
-    location = OneToOneField(Location, on_delete=CASCADE, related_name='location')
-    queue = ManyToManyField(Queue, blank=True)
+    location = OneToOneField(Location, on_delete=CASCADE, related_name='location', null=True)
+    queue = ManyToManyField(Queue, blank=True, related_name='queue')
 
     def __str__(self):
         return "{}".format(self.name)
@@ -126,13 +136,14 @@ class Teacher(Model):
 
 class Student(Model):
     user = OneToOneField(User, on_delete=CASCADE, related_name='student')
+    register_id = CharField(max_length=250, null=True, blank=True)
     name = CharField(max_length=100, null=True)
     sapID = CharField(unique=True, null=True, max_length=11)
     department = CharField(max_length=10, null=True)
     year = CharField(max_length=2, null=True)
     div = CharField(max_length=1, null=True)
     batch = CharField(max_length=2, null=True)
-    subscription = ManyToManyField(Teacher, blank=True)
+    subscription = ManyToManyField(Teacher, blank=True, related_name='subscribers')
     inQueue = BooleanField(default=False)
     created_at = DateTimeField(auto_now_add=True)
     updated_at = DateTimeField(auto_now=True)
