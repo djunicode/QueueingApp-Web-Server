@@ -80,11 +80,13 @@ WSGI_APPLICATION = 'queueing_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test2',
-        'USER': 'abc',
-        'PASSWORD': 'example@123',
-        'HOST': 'localhost',
-        'PORT': '',
+        # 'NAME': 'test2',
+        'NAME': 'docker',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        # 'HOST': 'localhost',
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
