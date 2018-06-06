@@ -17,5 +17,7 @@ First make sure you have Docker and docker-compose installed on your system.
 Also make sure your local mysql server is **not** running.
 Then navigate to this directory and type
 ```
+docker-compose run web python manage.py makemigrations
+docker-compose run web python manage.py migrate
 docker-compose up
 ```
