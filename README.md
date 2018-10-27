@@ -1,5 +1,5 @@
 # Queueing App Web Server
-DRF based web server for the Queueing App.
+Django REST framework based web server for the Queueing App.
 
 ## Team Members
 ### Project Leader
