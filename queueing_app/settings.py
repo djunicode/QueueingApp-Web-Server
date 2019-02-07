@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'queues',
     'rest_framework',
     'django_mysql',
+    "fcm_django",
 ]
 
 MIDDLEWARE = [
@@ -79,11 +80,13 @@ WSGI_APPLICATION = 'queueing_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'queue',
-        'USER': 'abc',
-        'PASSWORD': 'example@123',
-        'HOST': 'localhost',
-        'PORT': '',
+        # 'NAME': 'test2',
+        'NAME': 'docker',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        # 'HOST': 'localhost',
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
@@ -126,4 +129,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+ALLOWED_HOSTS = ['*']
+
 # AUTH_USER_MODEL = 'queues.Profile'
+
+
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'djqueuingapp@gmail.com'
+EMAIL_HOST_PASSWORD = 'QueuingApp#2898'
+EMAIL_PORT = 587
+
+
+FCM_DJANGO_SETTINGS = {
+        "FCM_SERVER_KEY": "AAAAIPgZxGg:APA91bES1oGIg3Em-SQQSxYUynTjIdoHciNadaq6-olWdXVFxWEpwVHEaRo5Wf_PU-EX2yD4tiih3xaPWA0d3sAJWgVQbJrtODhlklYV7dOQ-WmV2qJ5mnIbqxLoEpTzI6Qhsu4VaI9q"
+}
