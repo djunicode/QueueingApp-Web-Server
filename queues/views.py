@@ -327,8 +327,13 @@ class GetItemIndex(APIView):
 
     def put(self, request, pk):
         queue = self.get_object(pk)
-        index = queue.queueItems.index(request.data['sapID'])
+        serializer = QueueSerializer(queue)
+        if request.data['sapID'] in queue.queueItems:
+            index = queue.queueItems.index(request.data['sapID'])
+        else:
+            index = -1
         return Response({
+            "data": serializer.data,
             "index": index+1
         })
 
